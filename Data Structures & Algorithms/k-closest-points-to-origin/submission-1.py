@@ -1,0 +1,28 @@
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        for pt in points:
+            pt.append(pt[0]*pt[0]+pt[1]*pt[1])
+        closest=self.quickSelect(points,k,0,len(points)-1)
+        for pt in closest:
+            pt.pop()
+        return closest
+        
+    def quickSelect(self, arr: list[int], k:int, s:int, e:int) -> list[int]:
+        if s >= e:
+            return arr[:k]
+        pivot=arr[e]
+        left=s
+        for i in range(s,e):
+            if arr[i][2]<pivot[2]:
+                tmp=arr[left]
+                arr[left]=arr[i]
+                arr[i]=tmp
+                left+=1
+        arr[e]=arr[left]
+        arr[left]=pivot
+        if left==k or left==k-1:
+            return arr[:k]
+        elif left<k-1:
+            return self.quickSelect(arr,k,left+1,e)
+        else:
+            return self.quickSelect(arr,k,s,left-1)
