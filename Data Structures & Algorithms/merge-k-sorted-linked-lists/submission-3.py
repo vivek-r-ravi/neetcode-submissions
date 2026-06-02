@@ -1,0 +1,40 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+
+# divide and conquer approach
+# use solution from merge k linked lists problem
+# O(nlogk) on time, O(k) on space
+# space can be optimized further by passing in indicies as function argument
+# instead of passing the indicies inside list. e.g. (lists,0,m) instead of lists[:m]
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        if list1 is None:
+            return list2
+        if list2 is None:
+            return list1
+        dummy=ListNode()
+        curr=dummy
+        while list1 and list2:
+            if list1.val<=list2.val:
+                curr.next=list1
+                curr=curr.next
+                list1=list1.next
+            else:
+                curr.next=list2
+                curr=curr.next
+                list2=list2.next
+        curr.next=list1 if list1 else list2
+        return dummy.next
+
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        k=len(lists)
+        if k==0:
+            return
+        elif k==1:
+            return lists[0]
+        m=k//2
+        return self.mergeTwoLists(self.mergeKLists(lists[:m]),self.mergeKLists(lists[m:]))
